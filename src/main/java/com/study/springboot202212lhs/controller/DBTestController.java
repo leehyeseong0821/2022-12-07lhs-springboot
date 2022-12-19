@@ -29,7 +29,7 @@ public class DBTestController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUser(@PathVariable int userId){
         UserDto userDto = userService.getUser(userId);
-        return ResponseEntity.ok().body(userDto);
+        return ResponseEntity.ok().body(userDto);ddd
     }
 
 }
