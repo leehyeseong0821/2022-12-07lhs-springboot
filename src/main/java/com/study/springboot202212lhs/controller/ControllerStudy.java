@@ -1,4 +1,4 @@
-package com.study.springboot202212lhs.web.controller;
+package com.study.springboot202212lhs.controller;
 
 import com.study.springboot202212lhs.dto.RequestStudyDto;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.study.springboot202212lhs.web.controller;
+package com.study.springboot202212lhs.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
