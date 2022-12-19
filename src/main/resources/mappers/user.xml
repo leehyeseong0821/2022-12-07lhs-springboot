@@ -3,22 +3,24 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.study.springboot202212lhs.repository.UserRepository">
-    <insert id="saveUser" parameterType="com.study.springboot202212lhs.dto.UserDto">
+    <insert id="saveUser" parameterType="com.study.springboot202212lhs.dto.UserDto"
+    useGeneratedKeys="true" keyProperty="userId" >
         insert into user_mst
-        values(0,#{username},#{password},#{name},#{email})
+        values
+        (0,#{username},#{password},#{name},#{email})
     </insert>
 
     <select id="findUserByUserId" parameterType="integer" resultType="com.study.springboot202212lhs.dto.UserDto">
         select
-            user_id,
-            username,
-            password,
-            name,
-            email
+        user_id,
+        username,
+        password,
+        name,
+        email
         from
-            user_mst
+        user_mst
         where
-            user_id = #{userId}
+        user_id = #{userId}
 
     </select>
 </mapper>
