@@ -19,22 +19,24 @@ public class AccountApiControllerAdvice {
     public ResponseEntity<?> duplicateError(CustomDuplicateUsernameException e) {
         return ResponseEntity.badRequest().body(new CMRespDto<>(e.getMessage(), e.getErrorMap()));
     }
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<?> validationError(ConstraintViolationException e){
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> validationError(ConstraintViolationException e) {
         Map<String, String> errorMap = new HashMap<>();
         System.out.println(e.getConstraintViolations());
 
         e.getConstraintViolations().forEach(error -> {
-            String errorProperty =error.getPropertyPath().toString();
-            errorProperty=errorProperty.substring(errorProperty.lastIndexOf(".")+1);
+            String errorProperty = error.getPropertyPath().toString();
+            errorProperty = errorProperty.substring(errorProperty.lastIndexOf(".") + 1);
             errorMap.put(errorProperty, error.getMessage());
         });
-        return ResponseEntity.badRequest().body(new CMRespDto<>(e.getMessage(),errorMap));
+
+        return ResponseEntity.badRequest().body(new CMRespDto<>(e.getMessage(), errorMap));
     }
 
     @ExceptionHandler(CustomValidException.class)
-    public ResponseEntity<?> validationError(CustomValidException e){
-        return ResponseEntity.badRequest().body(new CMRespDto<>(e.getMessage(),e.getErrorMap()));
+    public ResponseEntity<?> validationError(CustomValidException e) {
+        return ResponseEntity.badRequest().body(new CMRespDto<>(e.getMessage(), e.getErrorMap()));
     }
+
 }

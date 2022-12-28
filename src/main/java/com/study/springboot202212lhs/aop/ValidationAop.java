@@ -1,26 +1,53 @@
 package com.study.springboot202212lhs.aop;
 
+import com.study.springboot202212lhs.exception.CustomValidException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BeanPropertyBindingResult;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Aspect
 @Component
 public class ValidationAop {
 
-    @Pointcut("execution(* com.study.springboot202212lhs.controller.AccountApiController.*(..))")
-    private void executionPointCut(){}
+    @Pointcut("execution(* com.study.springboot202212lhs.controller.account.AccountApiController.*(..))")
+    private void executionPointCut() {}
 
     @Around("executionPointCut()")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-    Object[] args = proceedingJoinPoint.getArgs();
+        Object[] args = proceedingJoinPoint.getArgs();
 
-    for (Object arg : args){
-        System.out.println(arg);
-    }
+        System.out.println("AOP 작동함!!");
 
-    return proceedingJoinPoint.proceed();
+        BeanPropertyBindingResult bindingResult = null;
+
+        for(Object arg : args) {
+            if(arg.getClass() == BeanPropertyBindingResult.class) {
+                bindingResult = (BeanPropertyBindingResult) arg;
+                break;
+            }
+        }
+
+        if(bindingResult != null) {
+            if(bindingResult.hasErrors()) {
+                Map<String, String> errorMap = new HashMap<>();
+                bindingResult.getFieldErrors().forEach(error -> {
+                    errorMap.put(error.getField(), error.getDefaultMessage());
+                });
+
+                throw new CustomValidException(errorMap);
+            }
+        }
+
+        // 메소드 호출 전 처리
+        Object returnValue = proceedingJoinPoint.proceed();
+        // 메소드 호출 후 처리
+
+        return returnValue;
     }
 }
