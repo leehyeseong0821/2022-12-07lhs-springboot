@@ -1,5 +1,6 @@
 package com.study.springboot202212lhs.aop;
 
+import com.study.springboot202212lhs.aop.annotation.ValidAspect;
 import com.study.springboot202212lhs.exception.CustomValidException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -18,9 +19,15 @@ public class ValidationAop {
     @Pointcut("execution(* com.study.springboot202212lhs.controller.account.AccountApiController.*(..))")
     private void executionPointCut() {}
 
-    @Around("executionPointCut()")
+    @Pointcut("@annotation(com.study.springboot202212lhs.aop.annotation.ValidAspect)")
+    private void annotationPointCut(){}
+
+    @Around("annotationPointCut()")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object[] args = proceedingJoinPoint.getArgs();
+        for(Object arg : args){
+            System.out.println(arg);
+        }
 
         System.out.println("AOP 작동함!!");
 
